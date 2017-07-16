@@ -1,3 +1,5 @@
+NOTE: This Fork is dedicated to parsing Wordpress shortcodes along with normal HTML provided with Himalaya
+
 # Himalaya
 
 > Parse HTML into JSON
