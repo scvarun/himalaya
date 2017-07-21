@@ -285,3 +285,41 @@ test('isWhitespace should work', t => {
   t.is(isWhitespaceChar('\t'), true)
   t.is(isWhitespaceChar('x'), false)
 })
+
+test('lexer should recognise a shortcode', t => {
+  const str = '[element]'
+  const options = {childlessTags: []}
+  const tokens = lexer(str, options)
+  t.deepEqual(tokens, [
+    {type: 'shortcode-start', close: false},
+    {type: 'shortcode', content: 'element'},
+    {type: 'shortcode-end', close: false}
+  ])
+})
+
+test('lexer should accept shortcode attributes', t => {
+  const str = '[element something="example"]'
+  const options = {childlessTags: []}
+  const tokens = lexer(str, options)
+  t.deepEqual(tokens, [
+    {type: 'shortcode-start', close: false},
+    {type: 'shortcode', content: 'element'},
+    {type: 'attribute', content: 'something="example"'},
+    {type: 'shortcode-end', close: false}
+  ])
+})
+
+test('lexer should end shortcode with content', t => {
+  const str = '[element]something[/element]'
+  const options = {childlessTags: []}
+  const tokens = lexer(str, options)
+  t.deepEqual(tokens, [
+    {type: 'shortcode-start', close: false},
+    {type: 'shortcode', content: 'element'},
+    {type: 'shortcode-end', close: false},
+    {type: 'text', content: 'something'},
+    {type: 'shortcode-start', close: true},
+    {type: 'shortcode', content: 'element'},
+    {type: 'shortcode-end', close: false}
+  ])
+})
