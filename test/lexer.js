@@ -323,3 +323,15 @@ test('lexer should end shortcode with content', t => {
     {type: 'shortcode-end', close: false}
   ])
 })
+
+test('lexer should parse shortcode without start', t => {
+  const str = 'something[/element]'
+  const options = {childlessTags: []}
+  const tokens = lexer(str, options)
+  t.deepEqual(tokens, [
+    {type: 'text', content: 'something'},
+    {type: 'shortcode-start', close: true},
+    {type: 'shortcode', content: 'element'},
+    {type: 'shortcode-end', close: false}
+  ])
+})
